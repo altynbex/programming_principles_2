@@ -2,4 +2,3 @@
 # Comments in Python start with #
 
 a = ''' This is the multiple line comment ''' 
-print(a) 
