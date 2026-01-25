@@ -1,15 +1,16 @@
-a = 1 # int
-b = 1.0 # float
-c = 7+3j # complex
+x = 1    # int
+y = 2.8  # float
+z = 1j   # complex
 
-a = 1
-b = float(a)
-print(a, b)
+#convert from int to float:
+a = float(x)
 
-c = 1.0
-d = int(c)
-print(c, d)
+#convert from float to int:
+b = int(y)
 
-e = 1
-f = complex(e)
-print(e, f)
+#convert from int to complex:
+c = complex(x)
+
+import random
+
+print(random.randrange(1, 10))
