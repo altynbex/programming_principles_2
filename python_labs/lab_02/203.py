@@ -1,11 +1,10 @@
 n = int(input())
 
-a = [0]*n
-for i in range(n):
-    a[i] = int(input())
+a = list(map(int, input().split()))
 
-sum = 0
+s = 0
 for i in range(n):
-    sum += a[i]
-print(sum)
+    s += a[i]
+
+print(s)
 
