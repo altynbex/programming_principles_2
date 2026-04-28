@@ -4,7 +4,8 @@ import csv
 conn = create_connection()
 cur = conn.cursor()
 
-# ---------------- CREATE TABLE ----------------
+#create table
+
 cur.execute("""
 CREATE TABLE IF NOT EXISTS contacts (
     id SERIAL PRIMARY KEY,
@@ -15,7 +16,9 @@ CREATE TABLE IF NOT EXISTS contacts (
 conn.commit()
 
 
-# ---------------- INSERT MANUAL ----------------
+#insert manual
+
+
 def insert_user():
     name = input("Name: ")
     phone = input("Phone: ")
@@ -28,7 +31,9 @@ def insert_user():
     print("Added!")
 
 
-# ---------------- INSERT CSV ----------------
+#insert csv
+
+
 def insert_csv():
     with open("contacts.csv", "r") as f:
         reader = csv.reader(f)
@@ -41,7 +46,9 @@ def insert_csv():
     print("CSV imported!")
 
 
-# ---------------- SEARCH ----------------
+#search
+
+
 def search():
     text = input("Name prefix: ")
 
@@ -54,7 +61,9 @@ def search():
         print(row)
 
 
-# ---------------- UPDATE ----------------
+#update
+
+
 def update():
     name = input("Name: ")
     phone = input("New phone: ")
@@ -67,7 +76,9 @@ def update():
     print("Updated!")
 
 
-# ---------------- DELETE ----------------
+#delete 
+
+
 def delete():
     name = input("Name to delete: ")
 
@@ -78,8 +89,19 @@ def delete():
     conn.commit()
     print("Deleted!")
 
+def search_by_phone():
+    text = input("Phone prefix: ")
+
+    cur.execute(
+        "SELECT * FROM contacts WHERE phone LIKE %s",
+        (text + "%",)
+    )
+
+    for row in cur.fetchall():
+        print(row)
+
 while True:
-    print("\n--- PHONEBOOK MENU ---")
+    print("\n PHONEBOOK MENU:")
     print("1. Add contact")
     print("2. Import CSV")
     print("3. Update contact")
@@ -100,4 +122,6 @@ while True:
     elif choice == "5":
         delete()
     elif choice == "6":
+        search_by_phone()
+    elif choice == "7":
         break
