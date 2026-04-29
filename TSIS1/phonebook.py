@@ -42,12 +42,12 @@ def search_by_email():
 
 
 def sorted_contacts():
-    field = input("Sort by (name/birthday/date): ")
+    field = input("Sort by (name/birthday/id): ")
 
     mapping = {
         "name": "name",
         "birthday": "birthday",
-        "date": "created_at"
+        "id": "id"
     }
 
     conn = get_connection()
@@ -69,11 +69,21 @@ def pagination():
     limit = 5
 
     while True:
-        cur.execute("SELECT * FROM get_contacts_page(%s, %s)", (limit, page))
+        offset = page * limit
+
+        cur.execute("""
+            SELECT c.id, c.name, c.email, c.birthday, g.name
+            FROM contacts c
+            LEFT JOIN groups g ON c.group_id = g.id
+            ORDER BY c.id
+            LIMIT %s OFFSET %s
+        """, (limit, offset))
+
         rows = cur.fetchall()
 
         if not rows:
             print("No more data")
+            break
 
         for r in rows:
             print(r)

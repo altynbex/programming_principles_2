@@ -1,0 +1,74 @@
+[
+    {
+        "name": "Alibek",
+        "email": "alibek.family@mail.com",
+        "birthday": "2000-02-20",
+        "group": "Family",
+        "phones": [
+            {
+                "number": "+77015556677",
+                "type": "mobile"
+            },
+            {
+                "number": "+77272220011",
+                "type": "home"
+            }
+        ]
+    },
+    {
+        "name": "Dias",
+        "email": "dias.work@company.com",
+        "birthday": "2001-11-03",
+        "group": "Work",
+        "phones": [
+            {
+                "number": "+77012223344",
+                "type": "work"
+            }
+        ]
+    },
+    {
+        "name": "Aigerim",
+        "email": "aigerim@gmail.com",
+        "birthday": "2004-01-30",
+        "group": "Friend",
+        "phones": [
+            {
+                "number": "+77019990011",
+                "type": "mobile"
+            },
+            {
+                "number": "+77275551234",
+                "type": "work"
+            }
+        ]
+    },
+    {
+        "name": "Aruzhan",
+        "email": "aruzhan@gmail.com",
+        "birthday": "2003-05-12",
+        "group": "Friend",
+        "phones": [
+            {
+                "number": "+77011234567",
+                "type": "mobile"
+            },
+            {
+                "number": "+77271230001",
+                "type": "home"
+            }
+        ]
+    },
+    {
+        "name": "Madi",
+        "email": "madi123@gmail.com",
+        "birthday": "2002-09-15",
+        "group": "Other",
+        "phones": [
+            {
+                "number": "+77018889900",
+                "type": "mobile"
+            }
+        ]
+    }
+]
