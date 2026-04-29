@@ -107,7 +107,8 @@ while True:
     print("3. Update contact")
     print("4. Search contact")
     print("5. Delete contact")
-    print("6. Exit")
+    print("6. Search by phone")
+    print("7. Exit")
 
     choice = input("Choose: ")
 
