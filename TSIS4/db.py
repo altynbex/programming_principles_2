@@ -1,16 +1,13 @@
 import psycopg2
 
 DB_CONFIG = {
-    "dbname": "phonebook", # поменяй на имя своей БД
-    "user": "altynbekamankozha",   # твой юзер
-    "password": "",    # твой пароль
+    "dbname": "snake_game_db",
+    "user": "altynbekamankozha",
+    "password": "",
     "host": "localhost",
     "port": "5432"
 }
-DB_NAME = "phonebook"
-DB_USER = "altynbekamankozha"
-DB_HOST = "localhost"
-DB_PASSWORD = ""
+
 def get_connection():
     return psycopg2.connect(**DB_CONFIG)
 
