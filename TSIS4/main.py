@@ -1,7 +1,3 @@
-# TSIS 4 Snake Game (Database Snake)
-# menu + settings + leaderboard + game loop
-# A1 English comments for defense
-
 import pygame, sys
 from config import WIDTH, HEIGHT, load_settings, save_settings
 from db import save_session, get_top_10, get_personal_best
