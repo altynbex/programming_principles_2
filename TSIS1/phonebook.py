@@ -1,17 +1,12 @@
-# phonebook.py
 import json
 from connect import get_connection
-
-# ---------------- BASIC HELPERS ----------------
 
 def get_contact_by_name(cur, name):
     cur.execute("SELECT id FROM contacts WHERE name = %s", (name,))
     return cur.fetchone()
 
-# ---------------- CONSOLE FEATURES ----------------
-
 def filter_by_group():
-    group = input("Enter group: ")
+    group = input("Enter group (family/work/friend/other): ")
     conn = get_connection()
     cur = conn.cursor()
 
@@ -29,7 +24,7 @@ def filter_by_group():
 
 
 def search_by_email():
-    query = input("Search email: ")
+    query = input("Search email (mail/company/gmail): ")
     conn = get_connection()
     cur = conn.cursor()
 
@@ -99,8 +94,6 @@ def pagination():
 
     conn.close()
 
-# ---------------- JSON EXPORT ----------------
-
 def export_json():
     conn = get_connection()
     cur = conn.cursor()
@@ -132,8 +125,6 @@ def export_json():
 
     conn.close()
     print("Exported!")
-
-# ---------------- JSON IMPORT ----------------
 
 def import_json():
     conn = get_connection()
@@ -174,7 +165,6 @@ def import_json():
     conn.close()
     print("Imported!")
 
-# ---------------- MAIN MENU ----------------
 
 def menu():
     while True:
