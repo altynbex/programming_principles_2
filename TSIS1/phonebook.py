@@ -1,15 +1,20 @@
 import json
 from connect import get_connection
 
+# find contact by name
+# return id of contact
 def get_contact_by_name(cur, name):
     cur.execute("SELECT id FROM contacts WHERE name = %s", (name,))
     return cur.fetchone()
 
+# filter contacts by group
+# example: family, work, friend
 def filter_by_group():
     group = input("Enter group (family/work/friend/other): ")
     conn = get_connection()
     cur = conn.cursor()
 
+    # search group in database
     cur.execute("""
         SELECT c.name, c.email, c.birthday, g.name
         FROM contacts c
@@ -17,17 +22,20 @@ def filter_by_group():
         WHERE g.name ILIKE %s
     """, (f"%{group}%",))
 
+    # print all results
     for row in cur.fetchall():
         print(row)
 
     conn.close()
 
-
+# search contact by email text
+# example: gmail, company, etc
 def search_by_email():
     query = input("Search email (mail/company/gmail): ")
     conn = get_connection()
     cur = conn.cursor()
 
+    # search email in contacts
     cur.execute("SELECT * FROM contacts WHERE email ILIKE %s", (f"%{query}%",))
 
     for row in cur.fetchall():
@@ -35,10 +43,12 @@ def search_by_email():
 
     conn.close()
 
-
+# sort contacts by field
+# name, birthday, or id
 def sorted_contacts():
     field = input("Sort by (name/birthday/id): ")
 
+    # safe mapping for sorting
     mapping = {
         "name": "name",
         "birthday": "birthday",
@@ -48,6 +58,7 @@ def sorted_contacts():
     conn = get_connection()
     cur = conn.cursor()
 
+    # order by selected field
     cur.execute(f"SELECT * FROM contacts ORDER BY {mapping.get(field, 'name')}")
 
     for row in cur.fetchall():
@@ -55,7 +66,8 @@ def sorted_contacts():
 
     conn.close()
 
-
+# show contacts page by page
+# pagination = small parts of data
 def pagination():
     conn = get_connection()
     cur = conn.cursor()
@@ -66,6 +78,7 @@ def pagination():
     while True:
         offset = page * limit
 
+        # get small part of data
         cur.execute("""
             SELECT c.id, c.name, c.email, c.birthday, g.name
             FROM contacts c
@@ -76,28 +89,35 @@ def pagination():
 
         rows = cur.fetchall()
 
+        # if no data
         if not rows:
             print("No more data")
             break
 
+        # print data
         for r in rows:
             print(r)
 
         cmd = input("next / prev / quit: ")
 
+        # next page
         if cmd == "next":
             page += 1
+        # previous page
         elif cmd == "prev" and page > 0:
             page -= 1
+        # stop program
         elif cmd == "quit":
             break
 
     conn.close()
 
+# export contacts to JSON file
 def export_json():
     conn = get_connection()
     cur = conn.cursor()
 
+    # get all contacts
     cur.execute("""
         SELECT c.id, c.name, c.email, c.birthday, g.name
         FROM contacts c
@@ -109,9 +129,11 @@ def export_json():
     for c in cur.fetchall():
         cid = c[0]
 
+        # get phones for contact
         cur.execute("SELECT phone, type FROM phones WHERE contact_id = %s", (cid,))
         phones = cur.fetchall()
 
+        # save contact data
         contacts.append({
             "name": c[1],
             "email": c[2],
@@ -120,22 +142,26 @@ def export_json():
             "phones": [{"number": p[0], "type": p[1]} for p in phones]
         })
 
+    # write to file
     with open("contacts.json", "w") as f:
         json.dump(contacts, f, indent=4)
 
     conn.close()
     print("Exported!")
 
+# import contacts from JSON file
 def import_json():
     conn = get_connection()
     cur = conn.cursor()
 
+    # read file
     with open("contacts.json") as f:
         data = json.load(f)
 
     for contact in data:
         name = contact["name"]
 
+        # check if contact exists
         cur.execute("SELECT id FROM contacts WHERE name=%s", (name,))
         exists = cur.fetchone()
 
@@ -144,12 +170,15 @@ def import_json():
             if choice == "skip":
                 continue
             else:
+                # delete old contact
                 cur.execute("DELETE FROM contacts WHERE name=%s", (name,))
 
+        # insert group if not exist
         cur.execute("INSERT INTO groups(name) VALUES(%s) ON CONFLICT DO NOTHING", (contact["group"],))
         cur.execute("SELECT id FROM groups WHERE name=%s", (contact["group"],))
         group_id = cur.fetchone()[0]
 
+        # insert contact
         cur.execute("""
             INSERT INTO contacts(name,email,birthday,group_id)
             VALUES(%s,%s,%s,%s) RETURNING id
@@ -157,6 +186,7 @@ def import_json():
 
         cid = cur.fetchone()[0]
 
+        # insert phones
         for p in contact["phones"]:
             cur.execute("INSERT INTO phones(contact_id,phone,type) VALUES(%s,%s,%s)",
                         (cid, p["number"], p["type"]))
@@ -165,7 +195,7 @@ def import_json():
     conn.close()
     print("Imported!")
 
-
+# menu of program
 def menu():
     while True:
         print("Phonebook Menu:")
@@ -185,15 +215,16 @@ def menu():
             search_by_email()
         elif choice == "3":
             sorted_contacts()
-        elif choice == "4": 
+        elif choice == "4":
             pagination()
-        elif choice == "5": 
+        elif choice == "5":
             export_json()
-        elif choice == "6": 
+        elif choice == "6":
             import_json()
-        elif choice == "7": 
+        elif choice == "7":
             break
 
-
+# start program
 if __name__ == "__main__":
     menu()
+
